@@ -1,11 +1,13 @@
 import board
 import busio
 from digitalio import DigitalInOut
-import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 from adafruit_esp32spi import adafruit_esp32spi
+import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 import adafruit_requests as requests
+from mlb_api import MLB_API
 
 team = "Phillies"
+time_zone = "America/New_York"
 
 # Add a secrets.py to your filesystem that has a dictionary called secrets with "ssid" and
 # "password" keys with your WiFi credentials. DO NOT share that file or commit it into Git or other
@@ -38,20 +40,10 @@ print("Connected to", str(esp.ssid, "utf-8"), "\tRSSI:", esp.rssi)
 socket.set_interface(esp)
 requests.set_socket(socket, esp)
 
-# Lets make a simple API communication class
-class StatsMLB:
-    def __init__(self, team):
+mlb_api = MLB_API(team=team, time_zone=time_zone, request_lib=requests)
 
-        self.team = team
-
-        self.base_url = "https://statsapi.mlb.com/api/v1"
-        self.schedule_endpoint = self.base_url + "/schedule"
-
-    def get_current_schedule(self):
-
-        response = requests.get(self.schedule_endpoint)
-        print(response.json())
-
-
-mlb = StatsMLB(team)
-mlb.get_current_schedule()
+games_info = mlb_api.get_info_on_todays_games()
+        
+for game_info in games_info:
+    
+    print(mlb_api.get_live_score(link=game_info["Link"]))
