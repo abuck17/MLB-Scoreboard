@@ -42,8 +42,16 @@ requests.set_socket(socket, esp)
 
 mlb_api = MLB_API(team=team, time_zone=time_zone, request_lib=requests)
 
-games_info = mlb_api.get_info_on_todays_games()
-        
-for game_info in games_info:
-    
-    print(mlb_api.get_live_score(link=game_info["Link"]))
+while True:
+
+    games_info = mlb_api.get_info_on_todays_games()
+            
+    for game_info in games_info:
+            
+        if game_info["State"] == "In Progress":
+                            
+            print(mlb_api.get_live_score(link=game_info["Link"]))
+
+        else:
+
+            print(mlb_api.get_standings(filter="Divison"))

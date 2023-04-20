@@ -129,8 +129,8 @@ dmypy.json
 .pyre/
 
 # Project specific
+._*
 .Trashes
 .vscode/
 .fseventsd/
-._*
 secrets.py
