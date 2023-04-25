@@ -88,7 +88,7 @@ print("Connecting to AP...")
 while not esp.is_connected:
     try:
         esp.connect_AP(secrets["ssid"], secrets["password"])
-    except RuntimeError as e:
+    except ConnectionError as e:
         print("could not connect to AP, retrying: ", e)
         continue
 print("Connected to", str(esp.ssid, "utf-8"), "\tRSSI:", esp.rssi)
