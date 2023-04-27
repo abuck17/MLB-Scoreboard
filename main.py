@@ -37,10 +37,17 @@ def display(payload):
         
         max_iter = 17
         
+        pad = 1
+        char_height = 5
+        char_length = 3
+        
         x_offset = 1
         y_offset = 4
 
         header_text = "   | W | L | GB "
+        blank_text = "                "
+        vertical_bar = "   |   |   |    "
+        horizontal_bar = "----------------"
         
         for iter in reversed(range(max_iter)):
             
@@ -62,13 +69,25 @@ def display(payload):
                     games_back += " "
                 games_back = rjust(games_back, 4, " ")
                 
-                team_text_data = "%s|%s|%s|%s" % (team_name, wins, losses, games_back)
+                team_name_text_data = "%s" % team_name
                                             
                 group.append(Label(fonts.small, x=x_offset, y=y_scroll_offset, scale=1, 
-                                   color=colors.yellow, text=team_text_data))
+                                   color=colors.yellow, text=team_name_text_data))
+                
+                team_stats_text_data = "   |%s|%s|%s" % (wins, losses, games_back)
+                                            
+                group.append(Label(fonts.small, x=x_offset - pad, y=y_scroll_offset, scale=1, 
+                                   color=colors.yellow, text=team_stats_text_data))
+ 
+            group.append(Label(fonts.small, x=x_offset - pad, y=y_offset - pad, scale=1, 
+                    color=colors.yellow, background_color=colors.green, text=blank_text))
             
-            group.append(Label(fonts.small, x=x_offset, y=y_offset, scale=1, 
-                    color=colors.yellow, background_color=colors.black, text=header_text))
+            group.append(Label(fonts.small, x=x_offset - pad, y=y_offset, scale=1, 
+                    color=colors.yellow, background_color=colors.green, text=header_text))
+            
+            for val in range(7):
+                group.append(Label(fonts.small, x=x_offset - pad, y=y_offset - pad + (val * char_height), 
+                                   scale=1, color=colors.white, background_color=None, text=vertical_bar))
                 
             matrix.display.show(group)
             
