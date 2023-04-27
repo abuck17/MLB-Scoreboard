@@ -8,18 +8,17 @@ import terminalio
 from adafruit_display_text.label import Label
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_shapes.polygon import Polygon
-from adafruit_bitmap_font import bitmap_font
 from adafruit_matrixportal.matrix import Matrix
 
 import adafruit_esp32spi.adafruit_esp32spi as esp32spi
 import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 import adafruit_requests as requests
 
+import colors
+import fonts
 from mlb_api import MLB_API
 
 matrix = Matrix()
-
-font = bitmap_font.load_font("/fonts/4x6.bdf")
 
 def rjust(string, length, character):
     while len(string) < length:
@@ -28,38 +27,60 @@ def rjust(string, length, character):
 
 def display(payload):
     
-    group = displayio.Group()
-    
     if payload["Type"] == "Startup":
-        group.append(Label(font, x=4, y=16, scale=1, color=0xFF0000, text="MLB Scoreboard"))
+        
+        group = displayio.Group()
+        group.append(Label(fonts.small, x=4, y=16, scale=1, color=colors.yellow, text="MLB Scoreboard"))
         matrix.display.show(group)
     
     elif payload["Type"] == "Division Standings":
         
-        offset = 4
-        group.append(Label(font, x=1, y=offset, scale=1, color=0xFF0000, text="   | W | L | GB "))
-        for team in payload["Data"]:
-            offset += 8
-            
-            wins = rjust(str(team["Wins"]), 3, " ")
-            losses = rjust(str(team["Losses"]), 3, " ")
-            
-            games_back = str(team["Games Back"])
-            if games_back == "-":
-                games_back += " "
-            games_back = rjust(games_back, 4, " ")
-            
-            text_data = "%s|%s|%s|%s" % (team["Team"], wins, losses, games_back)
-                                         
-            print(text_data)
-            group.append(Label(font, x=1, y=offset, scale=1, color=0xFF0000, text=text_data))
-        matrix.display.show(group)
+        max_iter = 17
         
+        x_offset = 1
+        y_offset = 4
+
+        header_text = "   | W | L | GB "
         
-        pass
+        for iter in reversed(range(max_iter)):
+            
+            y_scroll_offset = y_offset - iter
+            
+            group = displayio.Group()
+            
+            for team in payload["Data"]:
+                
+                y_scroll_offset += 8
+                
+                team_name = team["Team"]
+                
+                wins = rjust(str(team["Wins"]), 3, " ")
+                losses = rjust(str(team["Losses"]), 3, " ")
+                
+                games_back = str(team["Games Back"])
+                if games_back == "-":
+                    games_back += " "
+                games_back = rjust(games_back, 4, " ")
+                
+                team_text_data = "%s|%s|%s|%s" % (team_name, wins, losses, games_back)
+                                            
+                group.append(Label(fonts.small, x=x_offset, y=y_scroll_offset, scale=1, 
+                                   color=colors.yellow, text=team_text_data))
+            
+            group.append(Label(fonts.small, x=x_offset, y=y_offset, scale=1, 
+                    color=colors.yellow, background_color=colors.black, text=header_text))
+                
+            matrix.display.show(group)
+            
+            if iter == max_iter - 1:
+                time.sleep(15.0)
+            else:
+                time.sleep(0.25)
+        
     elif payload["Type"] == "Wildcard Standings":
         pass
     elif payload["Type"] == "Live Score":
+        print(payload)
         pass
     else:
         print("Current support does not include type '%s'" % payload["Type"])
@@ -109,7 +130,7 @@ while True:
         
         if any(in_progess):
             
-            display(mlb_api.get_live_score(link=games_info[in_progess.index(True)]))
+            display(mlb_api.get_live_score(link=games_info[in_progess.index(True)]["Link"]))
             continue
         
     display(mlb_api.get_standings(filter="Division"))

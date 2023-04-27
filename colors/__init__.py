@@ -1,0 +1,4 @@
+black = 0x000000
+white = 0xFFFFFF
+yellow = 0xFFEB3B
+green = 0x25661E
