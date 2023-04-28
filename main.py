@@ -38,16 +38,11 @@ def display(payload):
         max_iter = 17
         
         pad = 1
-        char_height = 5
-        char_length = 3
         
         x_offset = 1
         y_offset = 4
 
         header_text = "   | W | L | GB "
-        blank_text = "                "
-        vertical_bar = "   |   |   |    "
-        horizontal_bar = "----------------"
         
         for iter in reversed(range(max_iter)):
             
@@ -70,31 +65,33 @@ def display(payload):
                 games_back = rjust(games_back, 4, " ")
                 
                 team_name_text_data = "%s" % team_name
-                                            
+                                       
+                # Team Names     
                 group.append(Label(fonts.small, x=x_offset, y=y_scroll_offset, scale=1, 
                                    color=colors.yellow, text=team_name_text_data))
                 
                 team_stats_text_data = "   |%s|%s|%s" % (wins, losses, games_back)
-                                            
+                                 
+                # Team Data           
                 group.append(Label(fonts.small, x=x_offset - pad, y=y_scroll_offset, scale=1, 
                                    color=colors.yellow, text=team_stats_text_data))
- 
-            group.append(Label(fonts.small, x=x_offset - pad, y=y_offset - pad, scale=1, 
-                    color=colors.yellow, background_color=colors.green, text=blank_text))
-            
+                
+                # Separators
+                group.append(Polygon([(-1, 3+y_scroll_offset), (65, 3+y_scroll_offset), 
+                                      (65, y_scroll_offset-5), (-1, y_scroll_offset-5)], outline=colors.grey))   
+                
+            # Header
             group.append(Label(fonts.small, x=x_offset - pad, y=y_offset, scale=1, 
                     color=colors.yellow, background_color=colors.green, text=header_text))
             
-            for val in range(7):
-                group.append(Label(fonts.small, x=x_offset - pad, y=y_offset - pad + (val * char_height), 
-                                   scale=1, color=colors.white, background_color=None, text=vertical_bar))
-                
+            # Stationary Boarder
+            group.append(Polygon([(0, -1), (0, 32), (13, 32), (13, -1), (29, -1), (29, 32), (45, 32), (45, -1), 
+                                (63, -1), (63, 31), (0, 31), (0, 0), (62, 0), (62, 6), (0, 6)], outline=colors.grey))       
+                                 
             matrix.display.show(group)
             
             if iter == max_iter - 1:
                 time.sleep(15.0)
-            else:
-                time.sleep(0.25)
         
     elif payload["Type"] == "Wildcard Standings":
         pass
@@ -146,12 +143,22 @@ while True:
     if games_info:
         
         in_progess = [game_info["State"] == "In Progress" for game_info in games_info]
-        
+        scheduled = [game_info["State"] == "Scheduled" for game_info in games_info]
+        final = [game_info["State"] == "Final" for game_info in games_info]
+                
         if any(in_progess):
             
             display(mlb_api.get_live_score(link=games_info[in_progess.index(True)]["Link"]))
             continue
         
+        if any(scheduled):
+            
+            pass
+        
+        if any(final):
+            
+            pass
+            
     display(mlb_api.get_standings(filter="Division"))
 
 '''
