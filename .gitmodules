@@ -1,3 +1,6 @@
 [submodule "mlb_api"]
 	path = mlb_api
 	url = git@github.com:abuck17/MLB-API.git
+[submodule "img"]
+	path = img
+	url = git@github.com:abuck17/MLB-Logos.git
