@@ -5,13 +5,13 @@ yellow = 0xFFEB3B
 green = 0x25661E
 
 team = {
-    "ARZ": {
-        "Primary": white,
-        "Secondary": grey,
+    "AZ": {
+        "Primary": 0xA71930,
+        "Secondary": 0xE3D4AD,
         },
     "ATL": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0xCE1141,
+        "Secondary": 0x13274F,
         },
     "BAL": {
         "Primary": 0xDF4601,
@@ -34,8 +34,8 @@ team = {
         "Secondary": grey,
         },
     "COL": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x333366,
+        "Secondary": 0xC4CED4,
         },
     "CWS": {
         "Primary": white,
@@ -58,8 +58,8 @@ team = {
         "Secondary": grey,
         },
     "LAD": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x005A9C,
+        "Secondary": 0xEF3E42,
         },
     "MIA": {
         "Primary": 0x00A3E0,
@@ -74,12 +74,12 @@ team = {
         "Secondary": 0xD31145,
         },
     "NYM": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x002D72,
+        "Secondary": 0xFF5910,
         },
     "NYY": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x003087,
+        "Secondary": 0xE4002C,
         },
     "OAK": {
         "Primary": white,
@@ -106,16 +106,16 @@ team = {
         "Secondary": grey,
         },
     "STL": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0xC41E3A,
+        "Secondary": 0x0C2340,
         },
     "TB": {
         "Primary": white,
         "Secondary": grey,
         },
     "TEX": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x003278,
+        "Secondary": 0xC0111F,
         },
     "TOR": {
         "Primary": 0x134A8E,
