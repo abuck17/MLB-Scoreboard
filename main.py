@@ -68,16 +68,31 @@ def display(payload):
         y_offset = 4
 
         header_text = "   | W | L | GB "
-        
+                
         for iter in reversed(range(max_iter)):
+            
+            # Save memonry by only showing standing that are displayed on scroll
+            if iter == 16:
+                indices = [4,3,2]
+            elif iter in [15,14,13,12,11,10,9]:
+                indices = [4,3,2,1]
+            elif iter == 8:
+                indices = [3,2,1]
+            elif iter in [7,6,5,4,3,2,1]:
+                indices = [3,2,1,0]
+            elif iter == 0:
+                indices = [2,1,0]
             
             y_scroll_offset = y_offset - iter
             
             group = displayio.Group()
             
-            for team in payload["Data"]:
+            for idx, team in enumerate(payload["Data"]):
                 
                 y_scroll_offset += 8
+                
+                if idx not in indices:
+                    continue
                 
                 team_name = team["Team"]
                 
@@ -122,7 +137,7 @@ def display(payload):
                         
         group = displayio.Group()
                 
-        group.append(Polygon([(32, -1), (32, 33)], outline=colors.grey))
+        group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
         if image_module_found:
         
@@ -157,22 +172,37 @@ def display(payload):
             group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
                             text=payload["Away Team"]))
             
-            group.append(Label(fonts.small, x=7, y=12, color=colors.grey, text=rjust(str(payload["Away Score"]), 2, " ")))
+            group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
             
             group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
                         text=payload["Home Team"]))
             
-            group.append(Label(fonts.small, x=23, y=12, color=colors.grey, text=rjust(str(payload["Home Score"]), 2, " ")))
+            group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
             
             batter = str(payload["Batter"])
             batter_text = '%s' % batter.split()[-1]
-            group.append(Label(fonts.small, x=0, y=28, color=colors.grey, text=batter_text[:8]))
+            group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=batter_text[:8]))
+
             
             pitcher = str(payload["Pitcher"])
             pitcher_text = '%s' % pitcher.split()[-1]
-            group.append(Label(fonts.small, x=0, y=21, color=colors.grey, text=pitcher_text[:8]))
+            group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=pitcher_text[:8]))
+         
+        if payload["Is Inning Complete"] and payload["Outs"] >= 3:
             
-        if not payload["Is Inning Complete"]:
+            if payload["Half Inning"] == "bottom":
+                inning_text = "END"
+            elif payload["Half Inning"] == "top":
+                inning_text = "MID"
+            group.append(Label(fonts.medium, x=42, y=12, color=colors.yellow, text=inning_text))
+                        
+            inning_text = ordinal(payload["Inning"])
+            if len(inning_text) == 3:
+                group.append(Label(fonts.medium, x=42, y=20, color=colors.yellow, text=inning_text))
+            else:
+                group.append(Label(fonts.medium, x=39, y=20, color=colors.yellow, text=inning_text)) 
+            
+        else:
             
             # First
             group.append(Polygon([(50, 12), (54, 8), (58, 12), (54, 16)], outline=colors.yellow))
@@ -224,26 +254,63 @@ def display(payload):
                 fill = colors.yellow
             group.append(Rect(58, 26, 4, 4, outline=colors.yellow, fill=fill))  
             
-        else:
-            
-            if payload["Half Inning"] == "bottom":
-                inning_text = "END"
-            elif payload["Half Inning"] == "top":
-                inning_text = "MID"
-            group.append(Label(fonts.medium, x=42, y=12, color=colors.yellow, text=inning_text))
-                        
-            inning_text = ordinal(payload["Inning"])
-            if len(inning_text) == 3:
-                group.append(Label(fonts.medium, x=42, y=20, color=colors.yellow, text=inning_text))
-            else:
-                group.append(Label(fonts.medium, x=39, y=20, color=colors.yellow, text=inning_text))
-            
         matrix.display.show(group)
         
     elif payload["Type"] == "Scheduled":
         
         group = displayio.Group()
+                
+        group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
+        if image_module_found:
+        
+            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
+            group.append(Rect(0, 16, 32, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
+
+            bitmap = displayio.OnDiskBitmap(img.logo[payload["Away Team"]])
+            tile_grid = displayio.TileGrid(bitmap, x=0, y=0, pixel_shader=bitmap.pixel_shader)
+            group.append(tile_grid)
+            #group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+            
+            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
+                            text=payload["Away Team"]))
+            
+            group.append(Label(fonts.small, x=23, y=12, color=colors.grey, text=rjust(str(payload["Away Score"]), 2, " ")))
+
+            bitmap = displayio.OnDiskBitmap(img.logo[payload["Home Team"]])
+            tile_grid = displayio.TileGrid(bitmap, x=0, y=16, pixel_shader=bitmap.pixel_shader)
+            group.append(tile_grid)
+            #group.append(Rect(0, 16, 16, 16, fill=colors.team[payload["Home Team"]]["Secondary"]))
+            
+            group.append(Label(fonts.medium, x=17, y=21, color=colors.team[payload["Home Team"]]["Secondary"], 
+                        text=payload["Home Team"]))
+            
+            group.append(Label(fonts.small, x=23, y=28, color=colors.grey, text=rjust(str(payload["Home Score"]), 2, " ")))
+            
+        else:
+            
+            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
+            group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
+            
+            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
+                            text=payload["Away Team"]))
+            
+            group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
+            
+            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
+                        text=payload["Home Team"]))
+            
+            group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
+            
+            away_pitcher = str(payload["Away Pitcher"])
+            away_batter_text = '%s' % away_pitcher.split()[-1]
+            group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=away_batter_text[:8]))
+
+            
+            home_pitcher = str(payload["Home Pitcher"])
+            home_pitcher_text = '%s' % home_pitcher.split()[-1]
+            group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=home_pitcher_text[:8]))
+                
         date_time = payload["Date Time"].split("T")
         
         year = int(date_time[0].split("-")[0])
@@ -275,8 +342,8 @@ def display(payload):
         
         time_text = hour_str + ":" + minute_str
  
-        group.append(Label(fonts.small, x=10, y=10, color=colors.yellow, text=time_text))
-        group.append(Label(fonts.small, x=10, y=16, color=colors.yellow, text="Start"))
+        group.append(Label(fonts.small, x=39, y=13, color=colors.yellow, text=time_text))
+        group.append(Label(fonts.small, x=39, y=19, color=colors.yellow, text="Start"))
         matrix.display.show(group)
 
     else:

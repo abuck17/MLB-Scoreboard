@@ -18,8 +18,8 @@ team = {
         "Secondary": 0x000000,
         },
     "BOS": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0xBD3039,
+        "Secondary": 0x0C2340,
         },
     "CHC": {
         "Primary": 0x0E3386,
