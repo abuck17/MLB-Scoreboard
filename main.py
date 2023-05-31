@@ -359,18 +359,19 @@ except ImportError:
     print("WiFi secrets are kept in secrets.py, please add them there!")
     raise
 
+# If you are using a board with pre-defined ESP32 Pins:
+esp32_cs = digitalio.DigitalInOut(board.ESP_CS)
+esp32_ready = digitalio.DigitalInOut(board.ESP_BUSY)
+esp32_reset = digitalio.DigitalInOut(board.ESP_RESET)
+
+spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
+esp = esp32spi.ESP_SPIcontrol(spi, esp32_cs, esp32_ready, esp32_reset)
+
 display({"Type": "Startup", "Team": secrets["team"]})
 
 while True:
 
-    # If you are using a board with pre-defined ESP32 Pins:
-    esp32_cs = digitalio.DigitalInOut(board.ESP_CS)
-    esp32_ready = digitalio.DigitalInOut(board.ESP_BUSY)
-    esp32_reset = digitalio.DigitalInOut(board.ESP_RESET)
-
-    spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
-    esp = esp32spi.ESP_SPIcontrol(spi, esp32_cs, esp32_ready, esp32_reset)
-
+    esp.reset()
     print("Connecting to AP...")
     while not esp.is_connected:
         try:
@@ -382,7 +383,7 @@ while True:
 
     # Initialize a requests object with a socket and esp32spi interface
     socket.set_interface(esp)
-    requests.set_socket(socket, esp)    
+    requests.set_socket(socket, esp) 
 
     mlb_api = MLB_API(team=secrets["team"], time_zone=secrets["timezone"], request_lib=requests)
 
@@ -418,4 +419,5 @@ while True:
             print("------------------------------------------")
             traceback.print_exception(None, e, e.__traceback__)
             print("------------------------------------------")
+            break
         
