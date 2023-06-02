@@ -122,7 +122,7 @@ team = {
         "Secondary": 0x1D2D5C,
         },
     "WSH": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0xAB0003,
+        "Secondary": 0x14225A,
         },
 }

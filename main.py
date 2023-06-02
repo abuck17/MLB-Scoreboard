@@ -264,7 +264,7 @@ def display(payload):
         
         if image_module_found:
         
-            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
+            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
             group.append(Rect(0, 16, 32, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
 
             bitmap = displayio.OnDiskBitmap(img.logo[payload["Away Team"]])
@@ -272,7 +272,7 @@ def display(payload):
             group.append(tile_grid)
             #group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
             
-            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
+            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
                             text=payload["Away Team"]))
             
             group.append(Label(fonts.small, x=23, y=12, color=colors.grey, text=rjust(str(payload["Away Score"]), 2, " ")))
@@ -289,10 +289,10 @@ def display(payload):
             
         else:
             
-            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
+            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
             group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
             
-            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
+            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
                             text=payload["Away Team"]))
             
             group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
@@ -304,12 +304,12 @@ def display(payload):
             
             away_pitcher = str(payload["Away Pitcher"])
             away_batter_text = '%s' % away_pitcher.split()[-1]
-            group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=away_batter_text[:8]))
+            group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
 
             
             home_pitcher = str(payload["Home Pitcher"])
             home_pitcher_text = '%s' % home_pitcher.split()[-1]
-            group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=home_pitcher_text[:8]))
+            group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
                 
         date_time = payload["Date Time"].split("T")
         
@@ -392,11 +392,13 @@ while True:
         try:
         
             games_info = mlb_api.get_info_on_todays_games()
+            
+            print(games_info)
                         
             if games_info:
                                                 
                 in_progess = [game_info["State"] == "In Progress" for game_info in games_info]
-                scheduled = [game_info["State"] in ["Pre-Game", "Scheduled"] for game_info in games_info]
+                scheduled = [game_info["State"] in ["Pre-Game", "Scheduled", "Warmup"] for game_info in games_info]
                 final = [game_info["State"] == "Final" for game_info in games_info]
                         
                 if any(in_progess):
