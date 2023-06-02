@@ -141,7 +141,7 @@ def display(payload):
         
         if image_module_found:
         
-            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
+            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
             group.append(Rect(0, 16, 32, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
 
             bitmap = displayio.OnDiskBitmap(img.logo[payload["Away Team"]])
@@ -149,7 +149,7 @@ def display(payload):
             group.append(tile_grid)
             #group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
             
-            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
+            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
                             text=payload["Away Team"]))
             
             group.append(Label(fonts.small, x=23, y=12, color=colors.grey, text=rjust(str(payload["Away Score"]), 2, " ")))
@@ -166,10 +166,10 @@ def display(payload):
             
         else:
             
-            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
+            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
             group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
             
-            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
+            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
                             text=payload["Away Team"]))
             
             group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
