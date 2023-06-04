@@ -208,19 +208,19 @@ def display(payload):
             group.append(Polygon([(50, 12), (54, 8), (58, 12), (54, 16)], outline=colors.yellow))
             if payload["Man On First"]:
                 group.append(Polygon([(51, 12), (54, 9), (57, 12), (54, 15), (52, 13), (52, 12), (54, 10), (56, 12), 
-                            (54, 14), (54, 8), (55, 12), (52, 13), (54, 12)], outline=colors.yellow))
+                            (54, 14), (54, 9), (55, 12), (52, 13), (54, 12)], outline=colors.white))
             
             # Second
             group.append(Polygon([(44, 6), (48, 2), (52, 6), (48, 10)], outline=colors.yellow))
             if payload["Man On Second"]:
                 group.append(Polygon([(45, 6), (48, 3), (51, 6), (48, 9), (46, 7), (46, 6), (48, 4), (50, 6),
-                                    (48, 8), (48, 2), (49, 6), (46, 7), (48, 5)], outline=colors.yellow))
+                                    (48, 8), (48, 3), (49, 6), (46, 7), (48, 5)], outline=colors.white))
                 
             # Third
             group.append(Polygon([(38, 12), (42, 8), (46, 12), (42, 16)], outline=colors.yellow))
             if payload["Man On Third"]:
                 group.append(Polygon([(39, 12), (42, 9), (45, 12), (42, 15), (40, 13), (40, 12), (42, 10), (44, 12), 
-                                    (42, 14), (42, 8), (43, 12), (40, 13), (42, 12)], outline=colors.yellow))
+                                    (42, 14), (42, 9), (43, 12), (40, 13), (42, 12)], outline=colors.white))
                 
             # Inning
             inning_text = str(payload["Inning"])
@@ -239,19 +239,19 @@ def display(payload):
             # Out One
             fill = None
             if payload["Outs"] > 0:
-                fill = colors.yellow
+                fill = colors.white
             group.append(Rect(48, 26, 4, 4, outline=colors.yellow, fill=fill))
             
             # Out Two
             fill = None
             if payload["Outs"] > 1:
-                fill = colors.yellow
+                fill = colors.white
             group.append(Rect(53, 26, 4, 4, outline=colors.yellow, fill=fill))
 
             # Out Three
             fill = None
             if payload["Outs"] > 2:
-                fill = colors.yellow
+                fill = colors.white
             group.append(Rect(58, 26, 4, 4, outline=colors.yellow, fill=fill))  
             
         matrix.display.show(group)
