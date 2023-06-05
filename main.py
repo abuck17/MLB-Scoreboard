@@ -1,4 +1,3 @@
-import os
 import traceback
 import time
 import board
@@ -19,13 +18,6 @@ import adafruit_datetime as datetime
 import colors
 import fonts
 from mlb_api import MLB_API
-
-try:
-    import img
-    image_module_found = True
-except ImportError:
-    print("No Logos Available!")
-    image_module_found = False
 
 matrix = Matrix()
 
@@ -49,7 +41,7 @@ def ljust(string, length, character):
 def display(payload):
     
     print(payload)
-    
+        
     if payload["Type"] == "Startup":
                 
         group = displayio.Group()
@@ -139,54 +131,27 @@ def display(payload):
                 
         group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
-        if image_module_found:
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
         
-            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
-            group.append(Rect(0, 16, 32, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+                        text=payload["Away Team"]))
+        
+        group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
+        
+        group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
+                    text=payload["Home Team"]))
+        
+        group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
+        
+        batter = str(payload["Batter"])
+        batter_text = '%s' % batter.split()[-1]
+        group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=batter_text[:8]))
 
-            bitmap = displayio.OnDiskBitmap(img.logo[payload["Away Team"]])
-            tile_grid = displayio.TileGrid(bitmap, x=0, y=0, pixel_shader=bitmap.pixel_shader)
-            group.append(tile_grid)
-            #group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
-            
-            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
-                            text=payload["Away Team"]))
-            
-            group.append(Label(fonts.small, x=23, y=12, color=colors.grey, text=rjust(str(payload["Away Score"]), 2, " ")))
-
-            bitmap = displayio.OnDiskBitmap(img.logo[payload["Home Team"]])
-            tile_grid = displayio.TileGrid(bitmap, x=0, y=16, pixel_shader=bitmap.pixel_shader)
-            group.append(tile_grid)
-            #group.append(Rect(0, 16, 16, 16, fill=colors.team[payload["Home Team"]]["Secondary"]))
-            
-            group.append(Label(fonts.medium, x=17, y=21, color=colors.team[payload["Home Team"]]["Secondary"], 
-                        text=payload["Home Team"]))
-            
-            group.append(Label(fonts.small, x=23, y=28, color=colors.grey, text=rjust(str(payload["Home Score"]), 2, " ")))
-            
-        else:
-            
-            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
-            group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
-            
-            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
-                            text=payload["Away Team"]))
-            
-            group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
-            
-            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
-                        text=payload["Home Team"]))
-            
-            group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
-            
-            batter = str(payload["Batter"])
-            batter_text = '%s' % batter.split()[-1]
-            group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=batter_text[:8]))
-
-            
-            pitcher = str(payload["Pitcher"])
-            pitcher_text = '%s' % pitcher.split()[-1]
-            group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=pitcher_text[:8]))
+        
+        pitcher = str(payload["Pitcher"])
+        pitcher_text = '%s' % pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=pitcher_text[:8]))
          
         if payload["Is Inning Complete"] and payload["Outs"] >= 3:
             
@@ -262,54 +227,27 @@ def display(payload):
                 
         group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
-        if image_module_found:
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
         
-            group.append(Rect(0, 0, 32, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
-            group.append(Rect(0, 16, 32, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+                        text=payload["Away Team"]))
+        
+        group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
+        
+        group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
+                    text=payload["Home Team"]))
+        
+        group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
+        
+        away_pitcher = str(payload["Away Pitcher"])
+        away_batter_text = '%s' % away_pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
 
-            bitmap = displayio.OnDiskBitmap(img.logo[payload["Away Team"]])
-            tile_grid = displayio.TileGrid(bitmap, x=0, y=0, pixel_shader=bitmap.pixel_shader)
-            group.append(tile_grid)
-            #group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
-            
-            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
-                            text=payload["Away Team"]))
-            
-            group.append(Label(fonts.small, x=23, y=12, color=colors.grey, text=rjust(str(payload["Away Score"]), 2, " ")))
-
-            bitmap = displayio.OnDiskBitmap(img.logo[payload["Home Team"]])
-            tile_grid = displayio.TileGrid(bitmap, x=0, y=16, pixel_shader=bitmap.pixel_shader)
-            group.append(tile_grid)
-            #group.append(Rect(0, 16, 16, 16, fill=colors.team[payload["Home Team"]]["Secondary"]))
-            
-            group.append(Label(fonts.medium, x=17, y=21, color=colors.team[payload["Home Team"]]["Secondary"], 
-                        text=payload["Home Team"]))
-            
-            group.append(Label(fonts.small, x=23, y=28, color=colors.grey, text=rjust(str(payload["Home Score"]), 2, " ")))
-            
-        else:
-            
-            group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
-            group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
-            
-            group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
-                            text=payload["Away Team"]))
-            
-            group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
-            
-            group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
-                        text=payload["Home Team"]))
-            
-            group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
-            
-            away_pitcher = str(payload["Away Pitcher"])
-            away_batter_text = '%s' % away_pitcher.split()[-1]
-            group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
-
-            
-            home_pitcher = str(payload["Home Pitcher"])
-            home_pitcher_text = '%s' % home_pitcher.split()[-1]
-            group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
+        
+        home_pitcher = str(payload["Home Pitcher"])
+        home_pitcher_text = '%s' % home_pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
                 
         date_time = payload["Date Time"].split("T")
         
@@ -344,6 +282,37 @@ def display(payload):
  
         group.append(Label(fonts.small, x=39, y=13, color=colors.yellow, text=time_text))
         group.append(Label(fonts.small, x=39, y=19, color=colors.yellow, text="Start"))
+        matrix.display.show(group)
+        
+    elif payload["Type"] == "Final Score":
+        
+        group = displayio.Group()
+                
+        group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
+        
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
+        
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+                        text=payload["Away Team"]))
+        
+        group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
+        
+        group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
+                    text=payload["Home Team"]))
+        
+        group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
+        
+        # away_pitcher = str(payload["Away Pitcher"])
+        # away_batter_text = '%s' % away_pitcher.split()[-1]
+        # group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
+
+        
+        # home_pitcher = str(payload["Home Pitcher"])
+        # home_pitcher_text = '%s' % home_pitcher.split()[-1]
+        # group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
+        
+        group.append(Label(fonts.small, x=39, y=16, color=colors.yellow, text="Final"))
         matrix.display.show(group)
 
     else:
@@ -413,7 +382,8 @@ while True:
                 
                 if any(final):
                     
-                    pass
+                    display(mlb_api.get_final_score(link=games_info[final.index(True)]["Link"]))
+                    continue
                     
             display(mlb_api.get_standings())
     
