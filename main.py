@@ -303,14 +303,18 @@ def display(payload):
         
         group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
         
-        # away_pitcher = str(payload["Away Pitcher"])
-        # away_batter_text = '%s' % away_pitcher.split()[-1]
-        # group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
-
+        if int(payload["Away Score"]) > int(payload["Home Score"]):
+            away_pitcher = str(payload["Winner"])
+            home_pitcher = str(payload["Loser"])
+        else:
+            away_pitcher = str(payload["Loser"])
+            home_pitcher = str(payload["Winner"])
         
-        # home_pitcher = str(payload["Home Pitcher"])
-        # home_pitcher_text = '%s' % home_pitcher.split()[-1]
-        # group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
+        away_batter_text = '%s' % away_pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
+
+        home_pitcher_text = '%s' % home_pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
         
         group.append(Label(fonts.small, x=39, y=16, color=colors.yellow, text="Final"))
         matrix.display.show(group)
@@ -368,7 +372,7 @@ while True:
                                                 
                 in_progess = [game_info["State"] == "In Progress" for game_info in games_info]
                 scheduled = [game_info["State"] in ["Pre-Game", "Scheduled", "Warmup"] for game_info in games_info]
-                final = [game_info["State"] == "Final" for game_info in games_info]
+                final = [game_info["State"] in ["Final", "Game Over"] for game_info in games_info]
                         
                 if any(in_progess):
                     

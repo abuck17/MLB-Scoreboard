@@ -15,7 +15,10 @@ if [[ ! $(which circup) ]]; then
     python3 -m pip install circup
 fi 
 
-cp -rp ${build_dir} ${install_dir}
+for dir_path in $(find ${install_dir} -type d -mindepth 1 -maxdepth 1); do
+    rm -Rf ${dir_path}
+done
+cp -rp ${build_dir}/* ${install_dir}
 
 pushd ${install_dir}
 circup install --auto-file main.py
