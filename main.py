@@ -372,6 +372,7 @@ while True:
                                                 
                 in_progess = [game_info["State"] == "In Progress" for game_info in games_info]
                 scheduled = [game_info["State"] in ["Pre-Game", "Scheduled", "Warmup"] for game_info in games_info]
+                delayed = [game_info["State"] in ["Postponed"] for game_info in games_info]
                 final = [game_info["State"] in ["Final", "Game Over"] for game_info in games_info]
                         
                 if any(in_progess):
