@@ -4,9 +4,15 @@ import busio
 import digitalio
 import gc
 
+from adafruit_display_text.label import Label
+from adafruit_display_shapes.rect import Rect
+from adafruit_display_shapes.polygon import Polygon
+from adafruit_matrixportal.matrix import Matrix
+
 import adafruit_esp32spi.adafruit_esp32spi as esp32spi
 import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 import adafruit_requests as requests
+import adafruit_datetime as datetime
 
 import display
 from mlb_api import MLB_API
