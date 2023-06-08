@@ -30,10 +30,12 @@ mkdir -p ${output_dir}
 
 mkdir -p ${output_dir}/fonts
 mkdir -p ${output_dir}/colors
+mkdir -p ${output_dir}/display
 mkdir -p ${output_dir}/mlb_api
 
 cp -rp fonts ${output_dir}
 cp -rp colors ${output_dir}
+cp -rp display ${output_dir}
 cp -rp mlb_api/__init__.py ${output_dir}/mlb_api
 cp -rp main.py ${output_dir}/main.py
 
