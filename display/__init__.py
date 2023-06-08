@@ -1,9 +1,5 @@
-import traceback
 import time
-import board
-import busio
 import displayio
-import digitalio
 
 from adafruit_display_text.label import Label
 from adafruit_display_shapes.rect import Rect
@@ -189,9 +185,9 @@ def render(payload):
                 group.append(Label(fonts.medium, x=41, y=25, color=colors.yellow, text=inning_text))
             
                 if payload["Half Inning"] == "bottom":
-                    group.append(Polygon([(35, 24), (39, 24), (37, 26), (35, 24), (37, 24), (37, 26)], outline=colors.yellow))
+                    group.append(Polygon([(35, 24), (39, 24), (37, 26), (35, 24), (37, 24), (37, 26)], outline=colors.white))
                 elif payload["Half Inning"] == "top":
-                    group.append(Polygon([(35, 25), (39, 25), (37, 23), (35, 25), (37, 25), (37, 23)], outline=colors.yellow))
+                    group.append(Polygon([(35, 25), (39, 25), (37, 23), (35, 25), (37, 25), (37, 23)], outline=colors.white))
                 
             # Count
             count_text = "%d-%d" % (payload["Balls"], payload["Strikes"])
@@ -313,6 +309,37 @@ def render(payload):
         group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
         
         group.append(Label(fonts.small, x=39, y=16, color=colors.yellow, text="Final"))
+        matrix.display.show(group)
+        
+    elif payload["Type"] == "Delayed":
+        
+        group = displayio.Group()
+                
+        group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
+        
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
+        
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+                        text=payload["Away Team"]))
+        
+        group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
+        
+        group.append(Label(fonts.medium, x=17, y=5, color=colors.team[payload["Home Team"]]["Secondary"], 
+                    text=payload["Home Team"]))
+        
+        group.append(Label(fonts.small, x=23, y=12, color=colors.white, text=rjust(str(payload["Home Score"]), 2, " ")))
+                
+        away_pitcher = str(payload["Away Pitcher"])
+        away_batter_text = '%s' % away_pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=21, color=colors.yellow, text=away_batter_text[:8]))
+
+        
+        home_pitcher = str(payload["Home Pitcher"])
+        home_pitcher_text = '%s' % home_pitcher.split()[-1]
+        group.append(Label(fonts.small, x=0, y=28, color=colors.yellow, text=home_pitcher_text[:8]))
+        
+        group.append(Label(fonts.small, x=39, y=16, color=colors.yellow, text="Delay"))
         matrix.display.show(group)
 
     else:

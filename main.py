@@ -1,22 +1,13 @@
 import traceback
-import time
 import board
 import busio
-import displayio
 import digitalio
-
-from adafruit_display_text.label import Label
-from adafruit_display_shapes.rect import Rect
-from adafruit_display_shapes.polygon import Polygon
-from adafruit_matrixportal.matrix import Matrix
+import gc
 
 import adafruit_esp32spi.adafruit_esp32spi as esp32spi
 import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 import adafruit_requests as requests
-import adafruit_datetime as datetime
 
-import colors
-import fonts
 import display
 from mlb_api import MLB_API
 
@@ -66,6 +57,9 @@ while True:
                 scheduled = [game_info["State"] in ["Pre-Game", "Scheduled", "Warmup"] for game_info in games_info]
                 delayed = [game_info["State"] in ["Postponed"] for game_info in games_info]
                 final = [game_info["State"] in ["Final", "Game Over"] for game_info in games_info]
+                   
+                gc.collect()
+                print(gc.mem_free())
                         
                 if any(in_progess):
                     
@@ -76,6 +70,11 @@ while True:
                     
                     display.render(mlb_api.get_scheduled_game_info(link=games_info[scheduled.index(True)]["Link"]))
                     continue
+                
+                if any(delayed):
+                    
+                    display.render(mlb_api.get_delayed_game_info(link=games_info[delayed.index(True)]["Link"]))
+                    continue             
                 
                 if any(final):
                     
