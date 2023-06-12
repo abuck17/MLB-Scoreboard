@@ -72,25 +72,40 @@ while True:
       
                 if any(in_progess):
                     
-                    display.render(mlb_api.get_live_score(link=games_info[in_progess.index(True)]["Link"]))
+                    payload = mlb_api.get_live_score(link=games_info[in_progess.index(True)]["Link"])
+                    gc.collect()
+                    display.render(payload)
+                    gc.collect
                     continue
                 
                 if any(scheduled):
                     
-                    display.render(mlb_api.get_scheduled_game_info(link=games_info[scheduled.index(True)]["Link"]), time_zone_offset)
+                    payload = mlb_api.get_scheduled_game_info(link=games_info[scheduled.index(True)]["Link"])
+                    gc.collect()
+                    display.render(payload, time_zone_offset)
+                    gc.collect()
                     continue
                 
                 if any(delayed):
                     
-                    display.render(mlb_api.get_delayed_game_info(link=games_info[delayed.index(True)]["Link"]))
+                    payload = mlb_api.get_delayed_game_info(link=games_info[delayed.index(True)]["Link"])
+                    gc.collect()
+                    display.render(payload)
+                    gc.collect()
                     continue             
                 
                 if any(final):
                     
-                    display.render(mlb_api.get_final_score(link=games_info[final.index(True)]["Link"]))
+                    payload = mlb_api.get_final_score(link=games_info[final.index(True)]["Link"])
+                    gc.collect()
+                    display.render(payload)
+                    gc.collect()
                     continue
                     
-            display.render(mlb_api.get_standings())
+            payload = mlb_api.get_standings()
+            gc.collect()
+            display.render(payload)
+            gc.collect()
     
         except Exception as e:
             print("------------------------------------------")

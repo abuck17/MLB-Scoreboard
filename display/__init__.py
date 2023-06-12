@@ -33,7 +33,7 @@ def ljust(string, length, character):
 def render(payload, timezone_offset=None):
     
     print(payload)
-        
+            
     if payload["Type"] == "Startup":
                 
         group = displayio.Group()
