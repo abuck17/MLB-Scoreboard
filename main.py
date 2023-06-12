@@ -51,6 +51,8 @@ while True:
 
     while True:
         
+        time_zone_offset = mlb_api.get_timezone_offset()
+        
         try:
         
             games_info = mlb_api.get_info_on_todays_games()
@@ -65,8 +67,9 @@ while True:
                 final = [game_info["State"] in ["Final", "Game Over"] for game_info in games_info]
                    
                 gc.collect()
-                print(gc.mem_free())
-                        
+                print("Allocated Memory: %d bytes" % gc.mem_alloc())
+                print("Free Memory: %d bytes" % gc.mem_free())
+      
                 if any(in_progess):
                     
                     display.render(mlb_api.get_live_score(link=games_info[in_progess.index(True)]["Link"]))
@@ -74,7 +77,7 @@ while True:
                 
                 if any(scheduled):
                     
-                    display.render(mlb_api.get_scheduled_game_info(link=games_info[scheduled.index(True)]["Link"]))
+                    display.render(mlb_api.get_scheduled_game_info(link=games_info[scheduled.index(True)]["Link"]), time_zone_offset)
                     continue
                 
                 if any(delayed):

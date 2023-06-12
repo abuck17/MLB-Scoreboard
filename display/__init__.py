@@ -30,7 +30,7 @@ def ljust(string, length, character):
         string = string + character
     return string
 
-def render(payload):
+def render(payload, timezone_offset=None):
     
     print(payload)
         
@@ -251,7 +251,7 @@ def render(payload):
         second = int(date_time[1].split(":")[2][:-1])
         
         utc_date_time = datetime.datetime(year, month, day, hour, mintue, second)
-        timezone_delta = datetime.timedelta(hours=mlb_api.get_timezone_offset())
+        timezone_delta = datetime.timedelta(hours=timezone_offset)
         timezone_date_time = utc_date_time + timezone_delta
         
         hour = timezone_date_time.hour
