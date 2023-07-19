@@ -26,15 +26,15 @@ team = {
         "Secondary": 0xCC3433,
         },
     "CIN": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0xC6011F,
+        "Secondary": 0x000000,
         },
     "CLE": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x00385D,
+        "Secondary": 0xE50022,
         },
     "COL": {
-        "Primary": 0x333366,
+        "Primary": 0x663399,
         "Secondary": 0xC4CED4,
         },
     "CWS": {
@@ -66,8 +66,8 @@ team = {
         "Secondary": 0xEF3340,
         },
     "MIL": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0xFFC52F,
+        "Secondary": 0x12284B,
         },
     "MIN": {
         "Primary": 0x002B5C,
@@ -82,8 +82,8 @@ team = {
         "Secondary": 0xE4002C,
         },
     "OAK": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x004c00,
+        "Secondary": 0xEFB21E,
         },
     "PHI": {
         "Primary": 0xE81828,
@@ -94,8 +94,8 @@ team = {
         "Secondary": grey,
         },
     "SD": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x2F241D,
+        "Secondary": 0xFFC425,
         },
     "SEA": {
         "Primary": 0x0C2C56,
@@ -110,8 +110,8 @@ team = {
         "Secondary": 0x0C2340,
         },
     "TB": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x092C5C,
+        "Secondary": 0x72C6ED,
         },
     "TEX": {
         "Primary": 0x003278,

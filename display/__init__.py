@@ -1,7 +1,7 @@
 import time
 import displayio
 
-from adafruit_display_text.label import Label
+from adafruit_display_text.bitmap_label import Label
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_shapes.polygon import Polygon
 from adafruit_matrixportal.matrix import Matrix
@@ -123,10 +123,10 @@ def render(payload, timezone_offset=None):
                 
         group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
-        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
         group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
         
-        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
                         text=payload["Away Team"]))
         
         group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
@@ -148,9 +148,9 @@ def render(payload, timezone_offset=None):
         if payload["Is Inning Complete"] and payload["Outs"] >= 3:
             
             if payload["Half Inning"] == "bottom":
-                inning_text = "END"
+                inning_text = "End"
             elif payload["Half Inning"] == "top":
-                inning_text = "MID"
+                inning_text = "Mid"
             group.append(Label(fonts.medium, x=42, y=12, color=colors.yellow, text=inning_text))
                         
             inning_text = ordinal(payload["Inning"])
@@ -219,10 +219,10 @@ def render(payload, timezone_offset=None):
                 
         group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
-        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
         group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
         
-        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
                         text=payload["Away Team"]))
         
         group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
@@ -282,10 +282,10 @@ def render(payload, timezone_offset=None):
                 
         group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
-        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
         group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
         
-        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
                         text=payload["Away Team"]))
         
         group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))
@@ -317,10 +317,10 @@ def render(payload, timezone_offset=None):
                 
         group.append(Polygon([(32, -1), (32, 33)], outline=colors.white))
         
-        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Secondary"]))
+        group.append(Rect(0, 0, 16, 16, fill=colors.team[payload["Away Team"]]["Primary"]))
         group.append(Rect(16, 0, 16, 16, fill=colors.team[payload["Home Team"]]["Primary"]))
         
-        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Primary"], 
+        group.append(Label(fonts.medium, x=1, y=5, color=colors.team[payload["Away Team"]]["Secondary"], 
                         text=payload["Away Team"]))
         
         group.append(Label(fonts.small, x=7, y=12, color=colors.white, text=rjust(str(payload["Away Score"]), 2, " ")))

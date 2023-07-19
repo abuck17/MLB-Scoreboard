@@ -49,10 +49,18 @@ while True:
 
     mlb_api = MLB_API(team=secrets["team"], time_zone=secrets["timezone"], request_lib=requests)
 
+    payload = None
+
     while True:
-        
+
+        del payload
+
+        gc.collect()
+        print("Allocated Memory: %d bytes" % gc.mem_alloc())
+        print("Free Memory: %d bytes" % gc.mem_free())
+
         time_zone_offset = mlb_api.get_timezone_offset()
-        
+                
         try:
         
             games_info = mlb_api.get_info_on_todays_games()
@@ -63,19 +71,15 @@ while True:
                                                 
                 in_progess = [game_info["State"] == "In Progress" for game_info in games_info]
                 scheduled = [game_info["State"] in ["Pre-Game", "Scheduled", "Warmup"] for game_info in games_info]
-                delayed = [game_info["State"] in ["Postponed"] for game_info in games_info]
+                delayed = [game_info["State"] in ["Delayed", "Postponed"] for game_info in games_info]
                 final = [game_info["State"] in ["Final", "Game Over"] for game_info in games_info]
-                   
-                gc.collect()
-                print("Allocated Memory: %d bytes" % gc.mem_alloc())
-                print("Free Memory: %d bytes" % gc.mem_free())
       
                 if any(in_progess):
                     
                     payload = mlb_api.get_live_score(link=games_info[in_progess.index(True)]["Link"])
                     gc.collect()
                     display.render(payload)
-                    gc.collect
+                    gc.collect()
                     continue
                 
                 if any(scheduled):
