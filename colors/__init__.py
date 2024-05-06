@@ -54,8 +54,8 @@ team = {
         "Secondary": 0xBD9B60,
         },
     "LAA": {
-        "Primary": white,
-        "Secondary": grey,
+        "Primary": 0x003263,
+        "Secondary": 0xBA0021,
         },
     "LAD": {
         "Primary": 0x005A9C,
@@ -94,7 +94,7 @@ team = {
         "Secondary": grey,
         },
     "SD": {
-        "Primary": 0x2F241D,
+        "Primary": 0xBD9A7A,
         "Secondary": 0xFFC425,
         },
     "SEA": {
